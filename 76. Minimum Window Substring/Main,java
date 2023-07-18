@@ -1,0 +1,42 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        int left = 0;
+        int right = 0;
+        int len = Integer.MAX_VALUE;
+        String ans = "";
+        HashMap<Character, Integer> idealMap = new HashMap<>();
+        HashMap<Character, Integer> currMap = new HashMap<>();
+
+        for(int i=0; i<t.length(); i++) {
+            char c = t.charAt(i);
+            idealMap.put(c, idealMap.getOrDefault(c, 0) + 1);
+        }
+
+        while(right < s.length()) {
+            char cRight = s.charAt(right);
+            currMap.put(cRight, currMap.getOrDefault(cRight, 0) + 1);
+            while(areMatching(idealMap, currMap)) {
+                if(right - left + 1 < len) {
+                    len = right - left + 1;
+                    ans = s.substring(left, right+1);
+                }
+                char cLeft = s.charAt(left);
+                currMap.put(cLeft, currMap.get(cLeft) - 1);
+                left++;
+            }
+            right++;
+        }
+        return ans;
+    }
+    public boolean areMatching(Map<Character, Integer> ideal, Map<Character, Integer> curr) {
+        for(char c : ideal.keySet()) {
+            if(!curr.containsKey(c)) {
+                return false;
+            }
+            if(curr.get(c) < ideal.get(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
