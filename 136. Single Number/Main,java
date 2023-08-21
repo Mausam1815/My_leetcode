@@ -1,0 +1,15 @@
+class Solution {
+    public int singleNumber(int[] nums) {
+        Map<Integer, Integer> fmap = new HashMap<>();
+        for(int num : nums) {
+            fmap.put(num, fmap.getOrDefault(num, 0) + 1);
+        }
+
+        for(int num: nums) {
+            if(fmap.get(num) == 1){
+                return num;
+            }
+        }
+        return -1;
+    }
+}
